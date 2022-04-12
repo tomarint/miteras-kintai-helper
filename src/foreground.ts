@@ -36,7 +36,7 @@
     // console.log(`enterTextToInput: ${text}`);
   }
 
-  function messageHandler(): void {
+  function messageHandler(lunchTime: number): void {
     const inputSelector: { [name: string]: string } = {
       workTimeIn: "#work-time-in",
       workTimeOut: "#work-time-out",
@@ -119,7 +119,8 @@
     breakTimeMinutes = Math.max(breakTimeMinutes, 0);
     breakTimeMinutes = Math.min(breakTimeMinutes, 45);
     if (breakTimeMinutes > 0) {
-      const breakTimeInMinute = Math.max(12 * 60 + 0, workTimeInMinute + 1);
+      // console.log("lunchTime", lunchTime);
+      const breakTimeInMinute = Math.max(lunchTime, workTimeInMinute + 1);
       const breakTimeOutMinute = breakTimeInMinute + breakTimeMinutes;
       enterTextToInput(input["breakTime1In"], hhmm(breakTimeInMinute));
       enterTextToInput(input["breakTime1Out"], hhmm(breakTimeOutMinute));
@@ -133,8 +134,12 @@
     breakTimeMinutes = Math.max(breakTimeMinutes, 0);
     breakTimeMinutes = Math.min(breakTimeMinutes, 15);
     if (breakTimeMinutes > 0) {
-      const breakTimeInMinute = workTimeInMinute + elaspedTime;
-      const breakTimeOutMinute = breakTimeInMinute + breakTimeMinutes;
+      let breakTimeInMinute = workTimeInMinute + elaspedTime;
+      let breakTimeOutMinute = breakTimeInMinute + breakTimeMinutes;
+      if (workTimeOutMinute == breakTimeOutMinute) {
+        breakTimeInMinute -= 1;
+        breakTimeOutMinute -= 1;
+      }
       enterTextToInput(input["breakTime2In"], hhmm(breakTimeInMinute));
       enterTextToInput(input["breakTime2Out"], hhmm(breakTimeOutMinute));
     }
@@ -147,8 +152,12 @@
     breakTimeMinutes = Math.max(breakTimeMinutes, 0);
     breakTimeMinutes = Math.min(breakTimeMinutes, 15);
     if (breakTimeMinutes > 0) {
-      const breakTimeInMinute = workTimeInMinute + elaspedTime;
-      const breakTimeOutMinute = breakTimeInMinute + breakTimeMinutes;
+      let breakTimeInMinute = workTimeInMinute + elaspedTime;
+      let breakTimeOutMinute = breakTimeInMinute + breakTimeMinutes;
+      if (workTimeOutMinute == breakTimeOutMinute) {
+        breakTimeInMinute -= 1;
+        breakTimeOutMinute -= 1;
+      }
       enterTextToInput(input["breakTime3In"], hhmm(breakTimeInMinute));
       enterTextToInput(input["breakTime3Out"], hhmm(breakTimeOutMinute));
     }
@@ -157,8 +166,13 @@
   }
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.message === messageName) {
-      messageHandler();
-      sendResponse({ message: "success" });
+      chrome.storage.sync.get({
+        breaktime1: '720',
+      }, function (items) {
+        const lunchTime = Number(items.breaktime1);
+        messageHandler(lunchTime);
+        sendResponse({ message: "success" });
+      });
       return true;
     }
   });

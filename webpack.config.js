@@ -8,7 +8,8 @@ const isProduction = process.env.NODE_ENV == "production";
 const config = {
   entry: {
     background: path.resolve(__dirname, "src/background.ts"),
-    foreground: path.resolve(__dirname, "src/foreground.ts")
+    foreground: path.resolve(__dirname, "src/foreground.ts"),
+    options: path.resolve(__dirname, "src/options.ts")
   },
   output: {
     path: path.resolve(__dirname, "dist"),
