@@ -8,6 +8,8 @@
 
 Chromeウェブストアからインストールできます。
 
+https://chrome.google.com/webstore/detail/miteras-kintai-helper/lnpodkficjcocjggmhjeckdlfjkjndhg
+
 ## 使用方法
 
 1. MITERAS勤怠上の休憩時間の入力画面でコンテキストメニューを表示する。（通常は右クリック）
