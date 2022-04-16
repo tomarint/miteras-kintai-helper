@@ -1,6 +1,7 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
 const path = require("path");
+const TerserPlugin = require("terser-webpack-plugin");
 const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
@@ -41,6 +42,7 @@ const config = {
   optimization: {
     minimize: true,
     minimizer: [
+      new TerserPlugin(),
       new HtmlMinimizerPlugin(),
     ],
   },
