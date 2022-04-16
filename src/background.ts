@@ -5,7 +5,7 @@
     matchedTab: { [key: number]: boolean; } = {};
     contextMenuCreated: boolean = false;
     activeTabId: number = -1;
-    isUrlMatched(url?: string) {
+    isUrlMatched(url?: string): boolean {
       if (url != null && url.indexOf("https://kintai.miteras.jp/") >= 0) {
         return true;
       }
@@ -55,6 +55,9 @@
         if (tab == null) {
           return;
         }
+        if (tabId < 0) {
+          return;
+        }
         if (changeInfo.url != null) {
           // console.log("onUpdated: " + tab.id, JSON.stringify(changeInfo));
           this.matchedTab[tabId] = this.isUrlMatched(changeInfo.url);
@@ -97,7 +100,7 @@
       // Fired when a tab is created.
       // Note that the tab's URL may not be set at the time this event fired, but you can listen to onUpdated events to be notified when a URL is set.
       chrome.tabs.onCreated.addListener((tab: chrome.tabs.Tab) => {
-        if (tab != null && tab.id != null) {
+        if (tab != null && tab.id != null && tab.id >= 0) {
           this.matchedTab[tab.id] = false;
         }
       });
@@ -113,7 +116,7 @@
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs: chrome.tabs.Tab[]) => {
           if (tabs.length > 0) {
             const tab = tabs[0];
-            if (tab.id != null) {
+            if (tab.id != null && tab.id >= 0) {
               this.activeTabId = tab.id;
               this.updateContextMenu();
             }
@@ -126,7 +129,7 @@
         // console.log('context menu clicked');
         // console.log(info);
         // console.log(tab);
-        if (tab == null || tab.id == null) {
+        if (tab == null || tab.id == null || tab.id < 0) {
           return;
         }
         if (info.menuItemId === this.contextMenuId) {
