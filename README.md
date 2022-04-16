@@ -10,6 +10,10 @@ Chromeウェブストアからインストールできます。
 
 https://chrome.google.com/webstore/detail/miteras-kintai-helper/lnpodkficjcocjggmhjeckdlfjkjndhg
 
+## 初期設定
+
+1. アドオンのオプション画面を開いて、休憩時間の設定を行ってください。
+
 ## 使用方法
 
 1. MiTERAS勤怠上の休憩時間の入力画面でコンテキストメニューを表示する。（通常は右クリック）
