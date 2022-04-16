@@ -8,9 +8,9 @@
 </head>
 
 <body>
-    <label>
-        <span id="breaktime1Span">休憩時間</span>:
-        <select id="breaktime1Select">
+    <div>
+        <label for="breaktime1Select">1回目の休憩時間:</label>
+        <select id="breaktime1Select" name="breaktime1Select">
             <option value="690">11:30 - 12:15</option>
             <option value="705">11:45 - 12:30</option>
             <option value="720">12:00 - 12:45</option>
@@ -18,10 +18,19 @@
             <option value="750">12:30 - 13:15</option>
             <option value="765">12:45 - 13:30</option>
         </select>
-    </label>
+    </div>
+    <div>
+        <label for="breaktime3Select">3回目の休憩時間:</label>
+        <select id="breaktime3Select" name="breaktime3Select">
+            <option value="1">取得する</option>
+            <option value="0">取得しない</option>
+        </select>
+    </div>
 
-    <button id="save">Save</button>
-    <span id="status"></span>
+    <div>
+        <button id="save">Save</button>
+        <span id="status"></span>
+    </div>
 
     <script src="options.js"></script>
 </body>
