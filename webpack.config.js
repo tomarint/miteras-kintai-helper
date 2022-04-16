@@ -1,6 +1,7 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
 const path = require("path");
+const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV == "production";
@@ -9,7 +10,7 @@ const config = {
   entry: {
     background: path.resolve(__dirname, "src/background.ts"),
     foreground: path.resolve(__dirname, "src/foreground.ts"),
-    options: path.resolve(__dirname, "src/options.ts")
+    options: path.resolve(__dirname, "src/options.ts"),
   },
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -35,6 +36,12 @@ const config = {
         loader: "ts-loader",
         exclude: ["/node_modules/"],
       },
+    ],
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new HtmlMinimizerPlugin(),
     ],
   },
   resolve: {
