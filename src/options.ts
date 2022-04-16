@@ -5,8 +5,8 @@ function save_options() {
   if (breaktime1 == null || breaktime3 == null) {
     return;
   }
-  console.log("save breaktime1: ", breaktime1.options[breaktime1.selectedIndex].value);
-  console.log("save breaktime3: ", breaktime3.options[breaktime3.selectedIndex].value);
+  // console.log("save breaktime1: ", breaktime1.options[breaktime1.selectedIndex].value);
+  // console.log("save breaktime3: ", breaktime3.options[breaktime3.selectedIndex].value);
   chrome.storage.sync.set({
     breaktime1: breaktime1.options[breaktime1.selectedIndex].value,
     breaktime3: breaktime3.options[breaktime3.selectedIndex].value,
@@ -32,8 +32,8 @@ function restore_options() {
     const breaktime1 = document.querySelector<HTMLSelectElement>("#breaktime1Select");
     const breaktime3 = document.querySelector<HTMLSelectElement>("#breaktime3Select");
     if (breaktime1 != null && breaktime3 != null) {
-      console.log("restore breaktime1: ", items.breaktime1);
-      console.log("restore breaktime3: ", items.breaktime3);
+      // console.log("restore breaktime1: ", items.breaktime1);
+      // console.log("restore breaktime3: ", items.breaktime3);
       breaktime1.value = items.breaktime1;
       breaktime3.value = items.breaktime3;
     }
