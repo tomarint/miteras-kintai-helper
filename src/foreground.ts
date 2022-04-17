@@ -19,6 +19,7 @@
   }
 
   function messageHandler(options: { breaktime1: number, breaktime3: number }): void {
+    // console.log("messageHandler: ", options);
     const inputSelector: { [name: string]: string } = {
       workTimeIn: "#work-time-in",
       workTimeOut: "#work-time-out",
@@ -116,16 +117,20 @@
   }
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.message === messageName) {
+      // console.log("request.message:", request.message);
       chrome.storage.sync.get({
         breaktime1: '705',
         breaktime3: '0',
-      }, function (items) {
+      }).then(function (items) {
         const options = {
           breaktime1: Number(items.breaktime1),
           breaktime3: Number(items.breaktime3),
         };
         messageHandler(options);
         sendResponse({ message: "success" });
+      }).catch(function (error) {
+        // console.log(error);
+        sendResponse({ message: "error" });
       });
       return true;
     }
