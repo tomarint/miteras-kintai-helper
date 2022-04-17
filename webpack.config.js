@@ -40,7 +40,7 @@ const config = {
     ],
   },
   optimization: {
-    minimize: true,
+    minimize: isProduction,
     minimizer: [
       new TerserPlugin(),
       new HtmlMinimizerPlugin(),
