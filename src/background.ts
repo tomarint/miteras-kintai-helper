@@ -3,7 +3,6 @@
     readonly contextMenuId = "miteras-kintai-helper-context-menu-id";
     readonly messageName = "miteras-kintai-helper-message";
     matchedTab: { [key: number]: boolean; } = {};
-    contextMenuCreated: boolean = false;
     activeTabId: number = -1;
     isUrlMatched(url?: string): boolean {
       if (url != null && url.indexOf("https://kintai.miteras.jp/") >= 0) {
@@ -20,32 +19,26 @@
       const isMatched = this.matchedTab[tabId];
       // console.log(`updateContextMenus - ${isMatched}`);
       if (isMatched) {
-        if (!this.contextMenuCreated) {
-          this.contextMenuCreated = true;
-          // console.log(`Tab ${tabId} is now miteras kintai`);
-          chrome.contextMenus.create({
-            id: this.contextMenuId,
-            title: chrome.i18n.getMessage("extName"),
-            contexts: ["page"]
-          }, () => {
-            if (chrome.runtime.lastError) {
-              // console.log(chrome.runtime.lastError.message);
-              return;
-            }
-          });
-        }
+        // console.log(`Tab ${tabId} is now miteras kintai`);
+        chrome.contextMenus.create({
+          id: this.contextMenuId,
+          title: chrome.i18n.getMessage("extName"),
+          contexts: ["page"]
+        }, () => {
+          if (chrome.runtime.lastError) {
+            // console.log(chrome.runtime.lastError);
+            return;
+          }
+        });
       }
       else {
-        if (this.contextMenuCreated) {
-          this.contextMenuCreated = false;
-          // console.log(`Tab ${tabId} is no longer miteras kintai`);
-          chrome.contextMenus.remove(this.contextMenuId, () => {
-            if (chrome.runtime.lastError) {
-              // console.log(chrome.runtime.lastError.message);
-              return;
-            }
-          });
-        }
+        // console.log(`Tab ${tabId} is no longer miteras kintai`);
+        chrome.contextMenus.remove(this.contextMenuId, () => {
+          if (chrome.runtime.lastError) {
+            // console.log(chrome.runtime.lastError);
+            return;
+          }
+        });
       }
     }
 
@@ -61,29 +54,27 @@
         if (changeInfo.url != null) {
           // console.log("onUpdated: " + tab.id, JSON.stringify(changeInfo));
           this.matchedTab[tabId] = this.isUrlMatched(changeInfo.url);
+          this.updateContextMenu();
         }
         if (changeInfo.status === "complete") {
           // console.log("onUpdated: " + tab.id, JSON.stringify(changeInfo), tab.url);
           this.matchedTab[tabId] = this.isUrlMatched(tab.url);
+          this.updateContextMenu();
           if (this.matchedTab[tabId]) {
             chrome.scripting.executeScript({
               target: { tabId },
               files: ["foreground.js"]
             }).then((value: chrome.scripting.InjectionResult[]) => {
               if (chrome.runtime.lastError) {
-                // console.log(chrome.runtime.lastError.message);
+                // console.log(chrome.runtime.lastError);
                 return;
               }
-              this.updateContextMenu();
             }).catch((reason: any) => {
               if (chrome.runtime.lastError) {
-                // console.log(chrome.runtime.lastError.message);
+                // console.log(chrome.runtime.lastError);
                 return;
               }
             })
-          }
-          else {
-            this.updateContextMenu();
           }
         }
       });
@@ -140,6 +131,7 @@
             },
             (response) => {
               if (chrome.runtime.lastError) {
+                // console.log("chrome.runtime.lastError: ", chrome.runtime.lastError);
                 return;
               }
               if (response != null && response.message === "success") {
