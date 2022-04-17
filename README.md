@@ -8,7 +8,7 @@
 
 Chromeウェブストアからインストールできます。
 
-https://chrome.google.com/webstore/detail/miteras-kintai-helper/lnpodkficjcocjggmhjeckdlfjkjndhg
+<https://chrome.google.com/webstore/detail/miteras-kintai-helper/lnpodkficjcocjggmhjeckdlfjkjndhg>
 
 ## 初期設定
 
