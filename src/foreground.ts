@@ -64,9 +64,15 @@
         enterTextToInput(input["breakTime2In"], hhmm(breakTimeInMinute));
         enterTextToInput(input["breakTime2Out"], hhmm(breakTimeOutMinute));
       }
+      else {
+        enterTextToInput(input["breakTime2In"], "");
+        enterTextToInput(input["breakTime2Out"], "");
+      }
 
+      input["breakTime1In"]?.focus();
       return;
     }
+
     let hour = Number(workTimeIn.substring(0, 2));
     let minute = Number(workTimeIn.substring(3, 5));
     const workTimeInMinute = hour * 60 + minute;
@@ -112,6 +118,10 @@
       enterTextToInput(input["breakTime2In"], hhmm(breakTimeInMinute));
       enterTextToInput(input["breakTime2Out"], hhmm(breakTimeOutMinute));
     }
+    else {
+      enterTextToInput(input["breakTime2In"], "");
+      enterTextToInput(input["breakTime2Out"], "");
+    }
 
     //
     // Break time 3
@@ -131,6 +141,10 @@
         enterTextToInput(input["breakTime3In"], hhmm(breakTimeInMinute));
         enterTextToInput(input["breakTime3Out"], hhmm(breakTimeOutMinute));
       }
+    }
+    else {
+      enterTextToInput(input["breakTime3In"], "");
+      enterTextToInput(input["breakTime3Out"], "");
     }
 
     input["breakTime1In"]?.focus();
