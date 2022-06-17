@@ -39,6 +39,12 @@
     readonly messageName = "miteras-kintai-helper-message";
     tabManager: TabManager = new TabManager();
     activeTabId: number = -1;
+    options: { breaktime1: number, breaktime2: number, breaktime3: number, loginButtonAnimation: number } = {
+      breaktime1: 705,
+      breaktime2: -1,
+      breaktime3: 0,
+      loginButtonAnimation: 0,
+    };
 
     updateContextMenu(): void {
       if (this.activeTabId === -1) {
@@ -48,16 +54,19 @@
       const isMatched = this.tabManager.queryTab(tabId);
       // console.log(`updateContextMenus - ${isMatched}`);
       if (isMatched) {
-        chrome.contextMenus.create({
-          id: this.contextMenuId,
-          title: chrome.i18n.getMessage("extName"),
-          contexts: ["page"]
-        }, () => {
-          if (chrome.runtime.lastError) {
-            // console.log(chrome.runtime.lastError);
-            return;
+        chrome.contextMenus.create(
+          {
+            id: this.contextMenuId,
+            title: chrome.i18n.getMessage("extName"),
+            contexts: ["page"]
+          },
+          () => {
+            if (chrome.runtime.lastError) {
+              // console.log(chrome.runtime.lastError);
+              return;
+            }
           }
-        });
+        );
       }
       else {
         chrome.contextMenus.remove(this.contextMenuId, () => {
@@ -70,6 +79,24 @@
     }
 
     constructor() {
+      chrome.storage.sync.get(
+        {
+          breaktime1: '705',
+          breaktime2: '-1',
+          breaktime3: '0',
+          loginButtonAnimation: '0',
+        }
+      ).then((items) => {
+        this.options = {
+          breaktime1: Number(items.breaktime1),
+          breaktime2: Number(items.breaktime2),
+          breaktime3: Number(items.breaktime3),
+          loginButtonAnimation: Number(items.loginButtonAnimation),
+        };
+      }).catch(function (error) {
+        console.log(error);
+      });
+
       // Fired when a tab is updated.
       chrome.tabs.onUpdated.addListener((tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) => {
         if (tab == null || tabId < 0) {
@@ -85,20 +112,36 @@
           this.tabManager.updateTab(tabId, tab.url);
           this.updateContextMenu();
           if (this.tabManager.queryTab(tabId)) {
-            chrome.scripting.executeScript({
-              target: { tabId },
-              files: ["foreground.js"]
-            }).then((value: chrome.scripting.InjectionResult[]) => {
+            chrome.scripting.executeScript(
+              {
+                target: { tabId },
+                files: ["foreground.js"]
+              }
+            ).then((value: chrome.scripting.InjectionResult[]) => {
               if (chrome.runtime.lastError) {
                 // console.log(chrome.runtime.lastError);
-                return;
               }
             }).catch((reason: any) => {
               if (chrome.runtime.lastError) {
                 // console.log(chrome.runtime.lastError);
-                return;
               }
             })
+            if (this.options.loginButtonAnimation !== 1) {
+              chrome.scripting.insertCSS(
+                {
+                  target: { tabId },
+                  css: `.login-button { transition: none !important; }`
+                }
+              ).then(() => {
+                if (chrome.runtime.lastError) {
+                  // console.log(chrome.runtime.lastError);
+                }
+              }).catch((reason: any) => {
+                if (chrome.runtime.lastError) {
+                  // console.log(chrome.runtime.lastError);
+                }
+              })
+            }
           }
         }
       });
