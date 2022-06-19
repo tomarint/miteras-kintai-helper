@@ -79,24 +79,6 @@
     }
 
     constructor() {
-      chrome.storage.sync.get(
-        {
-          breaktime1: '705',
-          breaktime2: '-1',
-          breaktime3: '0',
-          loginButtonAnimation: '0',
-        }
-      ).then((items) => {
-        this.options = {
-          breaktime1: Number(items.breaktime1),
-          breaktime2: Number(items.breaktime2),
-          breaktime3: Number(items.breaktime3),
-          loginButtonAnimation: Number(items.loginButtonAnimation),
-        };
-      }).catch(function (error) {
-        console.log(error);
-      });
-
       // Fired when a tab is updated.
       chrome.tabs.onUpdated.addListener((tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) => {
         if (tab == null || tabId < 0) {
@@ -126,22 +108,39 @@
                 // console.log(chrome.runtime.lastError);
               }
             })
-            if (this.options.loginButtonAnimation !== 1) {
-              chrome.scripting.insertCSS(
-                {
-                  target: { tabId },
-                  css: `.login-button { transition: none !important; }`
-                }
-              ).then(() => {
-                if (chrome.runtime.lastError) {
-                  // console.log(chrome.runtime.lastError);
-                }
-              }).catch((reason: any) => {
-                if (chrome.runtime.lastError) {
-                  // console.log(chrome.runtime.lastError);
-                }
-              })
-            }
+            chrome.storage.sync.get(
+              {
+                breaktime1: '705',
+                breaktime2: '-1',
+                breaktime3: '0',
+                loginButtonAnimation: '0',
+              }
+            ).then((items) => {
+              this.options = {
+                breaktime1: Number(items.breaktime1),
+                breaktime2: Number(items.breaktime2),
+                breaktime3: Number(items.breaktime3),
+                loginButtonAnimation: Number(items.loginButtonAnimation),
+              };
+              if (this.options.loginButtonAnimation !== 1) {
+                chrome.scripting.insertCSS(
+                  {
+                    target: { tabId },
+                    css: `.login-button { transition: none !important; }`
+                  }
+                ).then(() => {
+                  if (chrome.runtime.lastError) {
+                    // console.log(chrome.runtime.lastError);
+                  }
+                }).catch((reason: any) => {
+                  if (chrome.runtime.lastError) {
+                    // console.log(chrome.runtime.lastError);
+                  }
+                })
+              }
+            }).catch(function (error) {
+              console.log(error);
+            });
           }
         }
       });
