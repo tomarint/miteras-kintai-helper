@@ -16,14 +16,9 @@
     return hour * 60 + min;
   }
   function hhmm(minute: number): string {
-    let sign = '';
-    if (minute < 0) {
-      minute = -minute;
-      sign = '-';
-    }
     const m = minute % 60;
     const h = (minute - m) / 60;
-    return `${sign}${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
   }
   function enterTextToInput(input: HTMLInputElement | null, text: string): void {
     if (input == null) {
@@ -194,9 +189,6 @@
 
   // Show cumulative overtime hours
   function showCumulativeOvertimeHours() {
-    if (!location.href.endsWith("/work-condition")) {
-      return;
-    }
     //
     // Add the header of the table
     //
@@ -217,9 +209,9 @@
       console.log("Unknown overtime format.")
       return;
     }
-    let new_th = head_th.cloneNode(true) as Element;
+    let new_th = head_th.cloneNode(true);
     head_tr.appendChild(new_th);
-    const new_overtime = new_th.querySelector("div > span");
+    const new_overtime = head_th.querySelector("div > span");
     if (new_overtime == null) {
       return;
     }
@@ -238,30 +230,12 @@
     }
     let cum_min = 0;
     trs.forEach(tr => {
-      // 種別
-      let text = tr.querySelector("td.table01__cell--cate > div")?.textContent;
+      const text = tr.querySelector("td:nth-child(13) > div > a")?.textContent;
       if (text == null) {
         return;
       }
-      const worktype = text.trim();
-
-      // 勤務合計
-      text = tr.querySelector("td:nth-child(16)")?.textContent;
-      if (text == null) {
-        return;
-      }
-      const worktime_min = parse_hhmm(text);
-      if (worktime_min === 0) {
-        if (worktype === "全休(代休)") {
-          cum_min -= 8 * 60;
-        }
-      } else {
-        if (worktype === "所定休日出勤") {
-          cum_min += worktime_min;
-        } else {
-          cum_min += worktime_min - 8 * 60;
-        }
-      }
+      const overtime_min = parse_hhmm(text);
+      cum_min += overtime_min;
       const cum_str = hhmm(cum_min);
       const new_td = document.createElement("td");
       new_td.className = "table01__cell--time";
