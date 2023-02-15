@@ -5,7 +5,6 @@
   "repository": "git@github.com:tomarint/miteras-kintai-helper.git",
   "author": "tomarin <tomarint@gmail.com>",
   "license": "MIT",
-  "description": "This is a chrome extension that enters break times in MiTERAS KINTAI.",
   "scripts": {
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
@@ -15,14 +14,15 @@
   },
   "devDependencies": {
     "@types/chrome": "^0.0.203",
-    "@webpack-cli/generators": "^3.0.1",
+    "@webpack-cli/generators": "^3.0.0",
     "copy-webpack-plugin": "^11.0.0",
-    "css-minimizer-webpack-plugin": "^4.2.2",
+    "css-minimizer-webpack-plugin": "^4.0.0",
     "html-minimizer-webpack-plugin": "^4.3.0",
-    "terser-webpack-plugin": "^5.3.6",
-    "ts-loader": "^9.4.2",
-    "typescript": "^4.9.3",
-    "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.1"
-  }
+    "terser-webpack-plugin": "^5.3.1",
+    "ts-loader": "^9.2.8",
+    "typescript": "^4.6.3",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^5.0.0"
+  },
+  "description": "This is a chrome extension that enters break times in MiTERAS KINTAI."
 }
