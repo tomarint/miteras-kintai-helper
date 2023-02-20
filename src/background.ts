@@ -99,7 +99,7 @@
                 target: { tabId },
                 files: ["foreground.js"]
               }
-            ).then((value: chrome.scripting.InjectionResult[]) => {
+            ).then(() => {
               if (chrome.runtime.lastError) {
                 // console.log(chrome.runtime.lastError);
               }
