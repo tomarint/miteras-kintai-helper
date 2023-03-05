@@ -17,18 +17,18 @@ const config = {
   },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "[name].js"
+    filename: "[name].js",
   },
-  devtool: false,  // not to use eval in debug build
+  devtool: false, // not to use eval in debug build
   plugins: [
     new CopyPlugin({
       patterns: [
         {
           from: "src",
           globOptions: {
-            ignore: ["**/*.ts"]
+            ignore: ["**/*.ts"],
           },
-        }
+        },
       ],
     }),
   ],

@@ -23,12 +23,20 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://kintai.miteras.jp/*/work-condition"],
-      "js": ["content_event.js"]
+      "matches": [
+        "https://kintai.miteras.jp/*/work-condition"
+      ],
+      "js": [
+        "content_event.js"
+      ]
     },
     {
-      "matches": ["https://kintai.miteras.jp/*"],
-      "js": ["content_style.js"]
+      "matches": [
+        "https://kintai.miteras.jp/*"
+      ],
+      "js": [
+        "content_style.js"
+      ]
     }
   ],
   "background": {
