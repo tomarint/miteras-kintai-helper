@@ -21,6 +21,12 @@
     "48": "images/icon48.png",
     "128": "images/icon128.png"
   },
+  "content_scripts": [
+    {
+      "matches": ["https://kintai.miteras.jp/*/work-condition"],
+      "js": ["foreground.js"]
+    }
+  ],
   "background": {
     "service_worker": "background.js"
   },
