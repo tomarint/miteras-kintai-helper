@@ -11,7 +11,8 @@ const isProduction = process.env.NODE_ENV == "production";
 const config = {
   entry: {
     background: path.resolve(__dirname, "src/background.ts"),
-    foreground: path.resolve(__dirname, "src/foreground.ts"),
+    content_event: path.resolve(__dirname, "src/content_event.ts"),
+    content_style: path.resolve(__dirname, "src/content_style.ts"),
     options: path.resolve(__dirname, "src/options.ts"),
   },
   output: {

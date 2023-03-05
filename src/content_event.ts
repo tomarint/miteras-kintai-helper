@@ -169,7 +169,7 @@
         messageHandler(options);
         sendResponse({ message: "success" });
       }).catch(function (error) {
-        // console.log(error);
+        console.log(error);
         sendResponse({ message: "error" });
       });
       return true;

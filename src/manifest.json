@@ -24,7 +24,11 @@
   "content_scripts": [
     {
       "matches": ["https://kintai.miteras.jp/*/work-condition"],
-      "js": ["foreground.js"]
+      "js": ["content_event.js"]
+    },
+    {
+      "matches": ["https://kintai.miteras.jp/*"],
+      "js": ["content_style.js"]
     }
   ],
   "background": {
@@ -33,11 +37,10 @@
   "options_page": "options.html",
   "permissions": [
     "tabs",
-    "scripting",
     "contextMenus",
     "storage"
   ],
   "host_permissions": [
-    "https://kintai.miteras.jp/*"
+    "https://kintai.miteras.jp/*/work-condition"
   ]
 }
