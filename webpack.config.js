@@ -1,12 +1,14 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
 const path = require("path");
+const ejs = require("ejs");
 const TerserPlugin = require("terser-webpack-plugin");
 const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV == "production";
+const browser = process.env.BROWSER || 'chrome';
 
 const config = {
   entry: {
@@ -26,7 +28,24 @@ const config = {
         {
           from: "src",
           globOptions: {
-            ignore: ["**/*.ts"],
+            ignore: ["**/*.ts", "**/*.ejs"],
+          },
+        },
+        {
+          from: "src/*.ejs",
+          to: ({ context, absoluteFilename }) => {
+            // Remove '.ejs' extension from output file
+            const newFileName = path.basename(absoluteFilename, ".ejs");
+            return path.join(context, "dist", newFileName);
+          },
+          transform: async (content) => {
+            const data = {
+              version: "1.0.8",
+              browser: browser,
+            };
+
+            // Render the EJS template
+            return ejs.render(content.toString(), data);
           },
         },
       ],
