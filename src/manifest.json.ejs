@@ -21,6 +21,13 @@
     "48": "images/icon48.png",
     "128": "images/icon128.png"
   },
+<% if (browser === 'firefox') { -%>
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{9d30ded4-39c1-4476-95e8-87c2ce826b9a}"
+    }
+  },
+<% } -%>
   "content_scripts": [
     {
       "matches": [
@@ -39,10 +46,24 @@
       ]
     }
   ],
+<% if (browser === 'firefox') { -%>
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+<% } else { -%>
   "background": {
     "service_worker": "background.js"
   },
+<% } -%>
+<% if (browser === 'firefox') { -%>
+  "options_ui": {
+    "page": "options.html"
+  },
+<% } else { -%>
   "options_page": "options.html",
+<% } -%>
   "permissions": [
     "tabs",
     "contextMenus",
