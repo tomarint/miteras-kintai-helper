@@ -1,7 +1,7 @@
 const contextMenuId = "miteras-kintai-helper-context-menu-id";
 const messageName = "miteras-kintai-helper-message";
 
-chrome.runtime.onInstalled.addListener(() => {
+function createContextMenu() {
   chrome.contextMenus.create(
     {
       id: contextMenuId,
@@ -15,6 +15,14 @@ chrome.runtime.onInstalled.addListener(() => {
       }
     }
   );
+}
+
+chrome.runtime.onInstalled.addListener(createContextMenu);
+chrome.runtime.onStartup.addListener(createContextMenu);
+
+chrome.runtime.onUpdateAvailable.addListener((details: chrome.runtime.UpdateAvailableDetails) => {
+  console.log("updating to version " + details.version);
+  chrome.runtime.reload();
 });
 
 // Fired when a context menu item is clicked.
