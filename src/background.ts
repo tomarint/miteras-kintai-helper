@@ -1,20 +1,28 @@
-const contextMenuId = "miteras-kintai-helper-context-menu-id";
-const messageName = "miteras-kintai-helper-message";
+const contextMenuId: string = "miteras-kintai-helper-context-menu-id";
+const messageName: string = "miteras-kintai-helper-message";
+const successMessage: string = "success";
 
-function createContextMenu() {
-  chrome.contextMenus.create(
-    {
-      id: contextMenuId,
-      title: chrome.i18n.getMessage("extName"),
-      contexts: ["all"],
-      documentUrlPatterns: ["https://kintai.miteras.jp/*/work-condition"],
-    },
-    () => {
-      if (chrome.runtime.lastError) {
-        console.log(chrome.runtime.lastError);
+function logError(location: string): void {
+  if (chrome.runtime.lastError) {
+    console.log(`Error in ${location}: ${chrome.runtime.lastError.message}`);
+  }
+}
+
+function createContextMenu(): void {
+  chrome.contextMenus.remove(contextMenuId, () => {
+    logError("contextMenus.remove");
+    chrome.contextMenus.create(
+      {
+        id: contextMenuId,
+        title: chrome.i18n.getMessage("extName"),
+        contexts: ["all"],
+        documentUrlPatterns: ["https://kintai.miteras.jp/*/work-condition"],
+      },
+      () => {
+        logError("contextMenus.create");
       }
-    }
-  );
+    );
+  });
 }
 
 chrome.runtime.onInstalled.addListener(createContextMenu);
@@ -28,7 +36,7 @@ chrome.runtime.onUpdateAvailable.addListener((details: chrome.runtime.UpdateAvai
 // Fired when a context menu item is clicked.
 chrome.contextMenus.onClicked.addListener(
   (info: chrome.contextMenus.OnClickData, tab?: chrome.tabs.Tab) => {
-    // console.log('context menu clicked');
+    // console.log("context menu clicked");
     // console.log(info);
     // console.log(tab);
     if (tab == null || tab.id == null || tab.id < 0) {
@@ -40,17 +48,13 @@ chrome.contextMenus.onClicked.addListener(
         {
           message: messageName,
         },
-        (response) => {
-          if (chrome.runtime.lastError) {
-            console.log(chrome.runtime.lastError);
-            return;
-          }
-          if (response != null && response.message === "success") {
-            // console.log("contextMenu is succeeded.");
+        (response: any) => { // Depending on your response, you may want to replace "any" with the actual type
+          logError("tabs.sendMessage");
+          if (response != null && response.message === successMessage) {
+            // console.log("contextMenu operation succeeded.");
           }
         }
       );
-      return true;
     }
   }
 );
