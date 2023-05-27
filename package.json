@@ -14,16 +14,16 @@
   },
   "description": "This is a browser extension that enters break times in MiTERAS KINTAI.",
   "devDependencies": {
-    "@types/chrome": "^0.0.226",
-    "@webpack-cli/generators": "^3.0.1",
+    "@types/chrome": "^0.0.237",
+    "@webpack-cli/generators": "^3.0.4",
     "copy-webpack-plugin": "^11.0.0",
     "css-minimizer-webpack-plugin": "^5.0.0",
     "ejs": "^3.1.9",
     "html-minimizer-webpack-plugin": "^4.3.0",
-    "terser-webpack-plugin": "^5.3.7",
-    "ts-loader": "^9.4.2",
-    "typescript": "^5.0.2",
-    "webpack": "^5.76.3",
-    "webpack-cli": "^5.0.1"
+    "terser-webpack-plugin": "^5.3.9",
+    "ts-loader": "^9.4.3",
+    "typescript": "^5.0.4",
+    "webpack": "^5.84.1",
+    "webpack-cli": "^5.1.1"
   }
 }
