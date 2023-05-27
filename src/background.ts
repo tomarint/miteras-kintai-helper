@@ -10,7 +10,10 @@ function logError(location: string): void {
 
 function createContextMenu(): void {
   chrome.contextMenus.remove(contextMenuId, () => {
-    logError("contextMenus.remove");
+    if (chrome.runtime.lastError) {
+      // This is expected if the context menu has not yet been created.
+      // logError("contextMenus.remove");
+    }
     chrome.contextMenus.create(
       {
         id: contextMenuId,
