@@ -1,7 +1,12 @@
 {
+<% if (browser === 'firefox') { -%>
+  "manifest_version": 2,
+<% } else { -%>
   "manifest_version": 3,
+<% } -%>
   "name": "__MSG_extName__",
   "version": "<%= version %>",
+<% if (browser !== 'firefox') { -%>
   "action": {
     "default_icon": {
       "16": "images/icon16.png",
@@ -12,6 +17,7 @@
     },
     "default_title": "__MSG_extName__"
   },
+<% } -%>
   "default_locale": "en",
   "description": "__MSG_extDescription__",
   "icons": {
@@ -59,17 +65,20 @@
 <% } -%>
 <% if (browser === 'firefox') { -%>
   "options_ui": {
-    "page": "options.html"
+    "page": "options.html",
+    "browser_style": false
   },
 <% } else { -%>
   "options_page": "options.html",
+<% } -%>
+<% if (browser !== 'firefox') { -%>
+  "host_permissions": [
+    "https://kintai.miteras.jp/*/work-condition"
+  ],
 <% } -%>
   "permissions": [
     "tabs",
     "contextMenus",
     "storage"
-  ],
-  "host_permissions": [
-    "https://kintai.miteras.jp/*/work-condition"
   ]
 }
