@@ -68,7 +68,17 @@ const createBrowserConfig = (browser) => {
       minimize: isProduction,
       minimizer: [
         new TerserPlugin(),
-        new HtmlMinimizerPlugin(),
+        new HtmlMinimizerPlugin({
+          minimizerOptions: {
+            collapseWhitespace: true,
+            removeComments: true,
+            conservativeCollapse: false,
+            removeComments: true,
+            // removeRedundantAttributes: true,
+            // removeEmptyAttributes: true,
+            // removeOptionalTags: true
+          },
+        }),
         new CssMinimizerPlugin(),
         new JsonMinimizerPlugin(),
       ],
