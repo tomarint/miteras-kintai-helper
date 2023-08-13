@@ -5,6 +5,7 @@ const ejs = require("ejs");
 const TerserPlugin = require("terser-webpack-plugin");
 const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV == "production";
@@ -69,6 +70,7 @@ const createBrowserConfig = (browser) => {
         new TerserPlugin(),
         new HtmlMinimizerPlugin(),
         new CssMinimizerPlugin(),
+        new JsonMinimizerPlugin(),
       ],
     },
     resolve: {
