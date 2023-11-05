@@ -81,8 +81,23 @@ import { observeElementChanges } from "./content_observer";
         enterTextToInput(input["breakTime2In"], hhmm(breakTimeInMinute));
         enterTextToInput(input["breakTime2Out"], hhmm(breakTimeOutMinute));
       } else {
-        enterTextToInput(input["breakTime2In"], "");
-        enterTextToInput(input["breakTime2Out"], "");
+        if (
+          isNumeric(workTimeIn[0]) &&
+          isNumeric(workTimeIn[1]) &&
+          isNumeric(workTimeIn[3]) &&
+          isNumeric(workTimeIn[4])
+        ) {
+          const workTimeInMinute =
+            Number(workTimeIn.substring(0, 2)) * 60 +
+            Number(workTimeIn.substring(3, 5));
+          const breakTimeInMinute = workTimeInMinute + 8 * 60 + 45;
+          const breakTimeOutMinute = breakTimeInMinute + 15;
+          enterTextToInput(input["breakTime2In"], hhmm(breakTimeInMinute));
+          enterTextToInput(input["breakTime2Out"], hhmm(breakTimeOutMinute));
+        } else {
+          enterTextToInput(input["breakTime2In"], "");
+          enterTextToInput(input["breakTime2Out"], "");
+        }
       }
 
       input["breakTime1In"]?.focus();
