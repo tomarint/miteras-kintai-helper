@@ -1,5 +1,4 @@
-(function () {
-  "use strict";
+{
   const messageName = "miteras-kintai-helper-message";
   function isNumeric(c: string): boolean {
     return c >= "0" && c <= "9";
@@ -192,4 +191,4 @@
       return true;
     }
   });
-})();
+}
