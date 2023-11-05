@@ -1,3 +1,5 @@
+import { observeElementChanges } from "./content_observer";
+
 {
   const messageName = "miteras-kintai-helper-message";
   function isNumeric(c: string): boolean {
@@ -20,13 +22,13 @@
     // console.log(`enterTextToInput: ${text}`);
   }
 
-  function messageHandler(options: {
+  function updateBreakTimeElements(options: {
     breaktime1: number;
     breaktime2: number;
     breaktime3: number;
     loginButtonAnimation: number;
   }): void {
-    // console.log("messageHandler: ", options);
+    // console.log("updateBreakTimeElements: ", options);
     const inputSelector: { [name: string]: string } = {
       workTimeIn: "#work-time-in",
       workTimeOut: "#work-time-out",
@@ -164,31 +166,81 @@
 
     input["breakTime1In"]?.focus();
   }
+
+  // Define the function as async
+  async function updateBreakTime(sendResponse?: (response: any) => void) {
+    try {
+      const items = await chrome.storage.sync.get({
+        breaktime1: "705",
+        breaktime2: "-1",
+        breaktime3: "0",
+        loginButtonAnimation: "0",
+      });
+
+      const options = {
+        breaktime1: Number(items.breaktime1),
+        breaktime2: Number(items.breaktime2),
+        breaktime3: Number(items.breaktime3),
+        loginButtonAnimation: Number(items.loginButtonAnimation),
+      };
+      updateBreakTimeElements(options);
+
+      // Send a response only if sendResponse is provided
+      if (sendResponse != null) {
+        sendResponse({ message: "success" });
+      }
+    } catch (error) {
+      console.error(error);
+      // Send a response only if sendResponse is provided
+      if (sendResponse != null) {
+        sendResponse({ message: "error" });
+      }
+    }
+  }
+
+  // Use this function in the message listener
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.message === messageName) {
-      // console.log("request.message:", request.message);
-      chrome.storage.sync
-        .get({
-          breaktime1: "705",
-          breaktime2: "-1",
-          breaktime3: "0",
-          loginButtonAnimation: "0",
-        })
-        .then(function (items) {
-          const options = {
-            breaktime1: Number(items.breaktime1),
-            breaktime2: Number(items.breaktime2),
-            breaktime3: Number(items.breaktime3),
-            loginButtonAnimation: Number(items.loginButtonAnimation),
-          };
-          messageHandler(options);
-          sendResponse({ message: "success" });
-        })
-        .catch(function (error) {
-          console.log(error);
-          sendResponse({ message: "error" });
-        });
-      return true;
+      // Pass sendResponse when called from the message listener
+      updateBreakTime(sendResponse);
+      return true; // To enable asynchronous response
     }
   });
+
+  function addButton(targetElement: HTMLElement): void {
+    // Find the element with the id "attendance-part1" within the target element
+    const referenceElement = targetElement.querySelector("#attendance-part1");
+    if (referenceElement == null) {
+      console.error('The element with id "attendance-part1" was not found.');
+      return;
+    }
+
+    // Create the button element
+    const button = document.createElement("button");
+    button.textContent = "休憩自動入力";
+    button.className = "btn btnAction btnAction--S u_maL7 char2";
+    button.onclick = function () {
+      button.disabled = true;
+      updateBreakTime().then(() => {
+        // Handle success
+        button.disabled = false;
+      }).catch((error) => {
+        // Handle error
+        button.disabled = false;
+        console.error(error);
+      });
+    };
+
+    // Append the button under the "attendance-part1" element
+    referenceElement.appendChild(button);
+  }
+
+  // Callback function for when the element is added
+  function onElementAdded(addedElement: HTMLElement) {
+    // Add the button to the added element
+    addButton(addedElement);
+  }
+
+  // Start observing changes to the element
+  observeElementChanges("daily-detail-content", onElementAdded);
 }
