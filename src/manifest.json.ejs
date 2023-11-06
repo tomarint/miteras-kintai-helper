@@ -40,7 +40,7 @@
         "https://kintai.miteras.jp/*/work-condition"
       ],
       "js": [
-        "content_event.js"
+        "content_event/content_event.js"
       ]
     },
     {
@@ -48,19 +48,19 @@
         "https://kintai.miteras.jp/*"
       ],
       "js": [
-        "content_style.js"
+        "content_style/content_style.js"
       ]
     }
   ],
 <% if (browser === 'firefox') { -%>
   "background": {
     "scripts": [
-      "background.js"
+      "background/background.js"
     ]
   },
 <% } else { -%>
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background/background.js"
   },
 <% } -%>
 <% if (browser === 'firefox') { -%>
